@@ -1,16 +1,16 @@
-/*1. En una empresa los empleados cobran un sueldo segÃºn la categoria, son 50
-empleados y 3 categorÃ­as
-CategorÃ­a 1 = $ 1500
-CategorÃ­a 2 = $ 2000
-CategorÃ­a 3 = $ 2500
-Al sueldo se le suman $ 100 por cada aÃ±o trabajado.
-Si se ingresa el nombre, categorÃ­a y antiguedad de cada empleado, calcular:
-A. Cuantos empleados hay por categorÃ­a
-B. Total de sueldos pagados por categorÃ­a
+/*1. En una empresa los empleados cobran un sueldo según la categoria, son 50
+empleados y 3 categorías
+Categoría 1 = $ 1500
+Categoría 2 = $ 2000
+Categoría 3 = $ 2500
+Al sueldo se le suman $ 100 por cada año trabajado.
+Si se ingresa el nombre, categoría y antiguedad de cada empleado, calcular:
+A. Cuantos empleados hay por categoría
+B. Total de sueldos pagados por categoría
 C. Sueldo promedio general
 D. Sueldo maximo y a quien pertenece
 E. Que porcentual sobre el total de sueldos representa cada total de sueldos
-de las categorÃ­as*/
+de las categorías*/
 
 #include <stdio.h>
 
@@ -41,7 +41,7 @@ int main()
 		scanf ("%[^\n]%*c", nombre);
 		printf("Ingrese categoria del empleado\n");
 		scanf("%d",&categoria);
-		printf("Ingrese antiguedad en aÃ±os trabajados del empleado\n");
+		printf("Ingrese antiguedad en años trabajados del empleado\n");
 		scanf("%d",&antiguedad);
 		switch(categoria)
 		{
@@ -79,3 +79,4 @@ int main()
 	printf("Porcentaje de sueldos:\n Categoria 1 = %.2lf\n Categoria 2 = %.2lf\n Categoria 3 = %.2lf\n",PorcentualCategoria1,PorcentualCategoria2,PorcentualCategoria3);
     return 0;
 }
+
