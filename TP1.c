@@ -1,26 +1,26 @@
 /* Una empresa textil maneja sus ventas por medio de corredores que cobran  comisiones sobre el total de las mismas.
-Tiene 4 artÌculos y son 10 corredores con las siguientes comisiones:
+Tiene 4 art√≠culos y son 10 corredores con las siguientes comisiones:
 -	corredor 1,2,3 =   5 %
 -	corredor 4,5,6 =   8 %
 -	corredor 7,8,9 = 10 %
 -	corredor 10    = 12 %
-el precio de sus artÌculos son 
+el precio de sus art√≠culos son 
 -	art 1 = $10
 -	art 2 = $15
 -	art 3 = $20
 -	art 4 = $12
 cada vez que realiza una venta sabe 
 -	nro de corredor
--	nro de artÌculo
+-	nro de art√≠culo
 -	cantidad
 -	descuento
 Calcular e imprimir
 a.	importe total vendido por cada corredor
 b.	porcentual que representa sobre la venta de la empresa
-c.	comisiÛn a cobrar por cada corredor
+c.	comisi√≥n a cobrar por cada corredor
 d.	cantidad de ventas realizadas por cada corredor
 e.	promedio del valor vendido por cada corredor
-f.	nro de corredor que vendiÛ m·s
+f.	nro de corredor que vendi√≥ m√°s
 */
 
 #include <stdio.h>
@@ -48,7 +48,7 @@ double sumarImporteDeVentas(struct Venta[1024],int);
 double main()
 {
 	int NumerodeCorredor, ArticuloVendido;
-	double CantidadArticulosVendidos, DescuentoAplicado, totalVendidoporCorredor1;
+	double CantidadArticulosVendidos, DescuentoAplicado, totalVendidoporCorredor;
 	struct Venta listaVaciaOutput[1024];
 	
 	FILE *archivoDeCorredores;
@@ -62,6 +62,7 @@ double main()
 	// Lee numero de corredor
 	fscanf(archivoDeCorredores, "%d",&NumerodeCorredor);
 	int i = 0;
+	int j = 0;
 	while(NumerodeCorredor != 0)
 	{
 		// Lee numero de articulo
@@ -83,9 +84,17 @@ double main()
 		fscanf(archivoDeCorredores, "%d",&NumerodeCorredor);
 	}
 	
-	listaDeVentasDeCorredor(listaDeVentas, i, 3, listaVaciaOutput);
-	totalVendidoporCorredor1 = sumarImporteDeVentas(listaVaciaOutput, i); 
-	printf("Total vendido por Corredor 3 = %.2lf",totalVendidoporCorredor1);
+	/*listaDeVentasDeCorredor(listaDeVentas, i, 10, listaVaciaOutput);
+	totalVendidoporCorredor = sumarImporteDeVentas(listaVaciaOutput, i); 
+	printf("Total vendido por Corredor 10 = %.2lf",totalVendidoporCorredor);*/
+	
+	for(j=1;j<11;j++)
+	{
+			listaDeVentasDeCorredor(listaDeVentas, i, j, listaVaciaOutput);
+			totalVendidoporCorredor = sumarImporteDeVentas(listaVaciaOutput, i); 
+			printf("Total vendido por Corredor %d = %.2lf\n",j, totalVendidoporCorredor);
+	}
+
 	
 	//listaDeVentasDeCorredor(listaDeVentas, i, 3, listaVaciaOutput);
 	//printf("%.2lf",sumarImporteDeVentas(listaDeVentas,i));
@@ -97,20 +106,6 @@ double main()
 	printf("%d",lista[4]);
 	*/
 	return 0;
-}
-
-double CalcularVentaDeCorredor(int Corredor, int Articulo, double Cantidad, double Descuento)
-{ 
-	/*
-	switch(Corredor)
-	{
-		case 1 ... 3: return CalcularVentaDeArticulos(Articulo, Cantidad, Descuento); break;
-		case 4 ... 6: return CalcularVentaDeArticulos(Articulo, Cantidad, Descuento); break;
-		case 7 ... 9: return CalcularVentaDeArticulos(Articulo, Cantidad, Descuento); break;
-		case 	  10: return CalcularVentaDeArticulos(Articulo, Cantidad, Descuento); break;	
-		
-	}
-	*/
 }
 
 double valorDeArticulo(int idArticulo){
@@ -158,13 +153,30 @@ double sumarImporteDeVentas(struct Venta listaDeVentas[1024],int sizeLista)
 	Input: struct Venta listaDeVentas, int idCorredor
 	Output: struct Venta listaDeVentasPorCorredor*/
 
-void listaDeVentasDeCorredor(struct Venta listaDeVentas[1024],int sizeLista,int idCorredor,struct Venta listaOutput[1024]){
+void listaDeVentasDeCorredor(struct Venta listaDeVentas[1024],int sizeLista,int idCorredor,struct Venta listaOutput[1024])
+{
 	int i;
-	int j;
-	for(i= 0;i<sizeLista;i++){
-		if(listaDeVentas[i].idCorredor == idCorredor){
+	int j = 0;
+	for(i= 0;i<sizeLista;i++)
+	{
+		if(listaDeVentas[i].idCorredor == idCorredor)
+		{
 			listaOutput[j] = listaDeVentas[i];
 			j++;
 		}
 	}
 }
+
+/*double CalcularVentaDeCorredor(int Corredor, int Articulo, double Cantidad, double Descuento)
+{ 
+	
+	switch(Corredor)
+	{
+		case 1 ... 3: return CalcularVentaDeArticulos(Articulo, Cantidad, Descuento); break;
+		case 4 ... 6: return CalcularVentaDeArticulos(Articulo, Cantidad, Descuento); break;
+		case 7 ... 9: return CalcularVentaDeArticulos(Articulo, Cantidad, Descuento); break;
+		case 	  10: return CalcularVentaDeArticulos(Articulo, Cantidad, Descuento); break;	
+		
+	}
+	
+}*/
