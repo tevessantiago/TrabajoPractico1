@@ -17,6 +17,8 @@ cada vez que realiza una venta sabe
 Calcular e imprimir
 a.	importe total vendido por cada corredor
 b.	porcentual que representa sobre la venta de la empresa
+	Tengo que calcular el importe total vendido (asumo que eso es la venta de la empresa) y despues calcular qué porcentaje pertenece a cada corredor (asumiendo que está implícito)
+	Se me ocurre hacer una suma de todos los importes vendidos por cada corredor para representar la venta de la empresa. Luego calcular el porcentual.
 c.	comisión a cobrar por cada corredor
 d.	cantidad de ventas realizadas por cada corredor
 e.	promedio del valor vendido por cada corredor
@@ -36,10 +38,6 @@ double comisionPorcentual123 = 5;
 double comisionPorcentual456 = 8;
 double comisionPorcentual789 = 10;
 double comisionPorcentual10  = 12;
-double precioArticulo1 = 10;
-double precioArticulo2 = 15;
-double precioArticulo3 = 20;
-double precioArticulo4 = 12;
 double CalcularVentaDeCorredor(int, int, double, double);
 double CalcularImporteDeVenta(struct Venta venta);
 double CalcularVenta(double, double, double);
