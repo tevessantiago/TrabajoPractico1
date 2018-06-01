@@ -88,7 +88,6 @@ double main()
 	{
 			ventasDeCorredor(listaDeVentas, tamañoDeListaDeVentas, j, listaDeVentasPorCorredor /* Variable Output */, CantidadVentasporCorredor);
 			listaDeValorDeVentasPorCorredor[corredor] = valorDeVentas(listaDeVentasPorCorredor, tamañoDeListaDeVentasPorCorredor);
-			ValorDeVentasDeLaEmpresa =  ventaDeLaEmpresa + ListadeVentasTotalesPorCorredor[j];
 			if(CantidadDeVentasporCorredor[j] != 0)
 			{
 				promedioVendidoPorCorredor = (ventasTotalesPorCorredor[j] / (double)CantidadVentasporCorredor[j]);
@@ -113,6 +112,7 @@ double main()
 		printf("Comision a cobrar por el corredor %d = $%.2lf\n", l, comisionDelCorredor);
 	}
 	
+	valorDeVentasDeLaEmpresa = valorDeVentas(listaDeVentas,tamañoDeListaDeVentas);
 	calcularCorredorMasRedituable(ListadeVentasTotalesPorCorredor);
 	
 	//printf("Promedio de ventas de la empresa = $%.2lf\n", (ventaDeLaEmpresa / 10));
