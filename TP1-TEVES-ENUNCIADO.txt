@@ -1,0 +1,23 @@
+Una empresa textil maneja sus ventas por medio de corredores que cobran  comisiones sobre el total de las mismas.
+Tiene 4 artículos y son 10 corredores con las siguientes comisiones:
+-	corredor 1,2,3 = 5 %
+-	corredor 4,5,6 = 8 %
+-	corredor 7,8,9 = 10 %
+-	corredor 10    = 12 %
+el precio de sus artículos son: 
+-	art 1 = $10
+-	art 2 = $15
+-	art 3 = $20
+-	art 4 = $12
+cada vez que realiza una venta sabe: 
+-	nro de corredor
+-	nro de artículo
+-	cantidad
+-	descuento
+Calcular e imprimir
+a.	importe total vendido por cada corredor
+b.	porcentual que representa sobre la venta de la empresa
+c.	comisión a cobrar por cada corredor
+d.	cantidad de ventas realizadas por cada corredor
+e.	promedio del valor vendido por cada corredor
+f.	nro de corredor que vendió más
