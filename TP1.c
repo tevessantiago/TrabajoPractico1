@@ -25,6 +25,7 @@ f.	nro de corredor que vendió más
 
 #include <stdio.h>
 
+// Se crea esta estructura para poder guardar los valores de las ventas en memoria
 struct Venta 
 {
 	int    idCorredor;
@@ -33,26 +34,25 @@ struct Venta
 	double descuento;
 };
 
-double CalcularVentaDeCorredor(int, int, double, double);
 double CalcularImporteDeVenta(struct Venta venta);
-double CalcularVenta(double, double, double);
-void listaDeVentasDeCorredor(struct Venta[1024],int,int,struct Venta[1024], int[1024]);
+void crearListaDeVentasDeCorredor(struct Venta[1024],int,int,struct Venta[1024], int[1024]);
 double sumarImporteDeVentas(struct Venta[1024],int);
 double calcularComisiondeCorredor(double ventaTotaldelCorredor[1024], int idCorredor);
-double calcularMejorCorredor(double ListadeVentasTotalesPorCorredor[1024]);
+double calcularCorredorMasRentable(double VentasTotalesPorCorredor[1024]);
 
 double main()
 {
-	int NumerodeCorredor, ArticuloVendido, i, j, k, l, m;
+	int NumerodeCorredor, ArticuloVendido, i, j, k, l;
 	int CantidadVentasporCorredor[1024] = { 0 }; // ordenada del 1 al 10
 	double CantidadArticulosVendidos, DescuentoAplicado, ventaDeLaEmpresa, comisionDelCorredor, promedioVendidoporCorredor;
-	double ListadeVentasTotalesPorCorredor[1024], ListaPorcentualdeCorredores[1024]; // ordenados del 1 al 10
+	double VentasTotalesPorCorredor[1024], PorcentualdeCorredores[1024]; // ordenados del 1 al 10
 	struct Venta listaDeVentas[1024];
-	struct Venta listaVaciaOutput[1024];
+	struct Venta ventasPorCorredor[1024];
 
 	ventaDeLaEmpresa = 0;
 	promedioVendidoporCorredor = 0;
 	
+	// Se lee un archivo con los datos de las ventas en vez de ingresarlos a mano
 	FILE *archivoDeCorredores;
 	archivoDeCorredores = fopen("corredores.txt", "r");
 	if (!archivoDeCorredores) {
@@ -72,50 +72,52 @@ double main()
 		// Lee descuento
 		fscanf(archivoDeCorredores, "%lf",&DescuentoAplicado);		
 		
+		// Se guardan en memoria los datos ingresados por cada venta.
 		struct Venta venta;
 		venta.idArticulo = ArticuloVendido;
 		venta.cantidad = CantidadArticulosVendidos;
 		venta.descuento = DescuentoAplicado;
 		venta.idCorredor = NumerodeCorredor;
 		listaDeVentas[i] = venta;
-		i++;
+		i++; // i representa la cantidad de ventas.
 		
 		// Sigue leyendo numero de corredor hasta que sea 0
 		fscanf(archivoDeCorredores, "%d",&NumerodeCorredor);
 	}
 	
+	// j representa el numero de corredor, recorre en orden del 1 al 10
 	for(j=1;j<11;j++)
 	{
-			listaDeVentasDeCorredor(listaDeVentas, i, j, listaVaciaOutput, CantidadVentasporCorredor);
-			ListadeVentasTotalesPorCorredor[j] = sumarImporteDeVentas(listaVaciaOutput, i);
-			ventaDeLaEmpresa =  ventaDeLaEmpresa + ListadeVentasTotalesPorCorredor[j];
+			crearListaDeVentasDeCorredor(listaDeVentas, i, j, ventasPorCorredor, CantidadVentasporCorredor);
+			VentasTotalesPorCorredor[j] = sumarImporteDeVentas(ventasPorCorredor, i);
+			ventaDeLaEmpresa =  ventaDeLaEmpresa + VentasTotalesPorCorredor[j];
 			if(CantidadVentasporCorredor[j] != 0)
 			{
-				promedioVendidoporCorredor = (ListadeVentasTotalesPorCorredor[j] / (double)CantidadVentasporCorredor[j]);
+				promedioVendidoporCorredor = (VentasTotalesPorCorredor[j] / (double)CantidadVentasporCorredor[j]);
 			}			
 			else
 			{
 				promedioVendidoporCorredor = 0;
 			}			
-			printf("El corredor %d hizo %d ventas y vendio un total de = $%.2lf\n", j, CantidadVentasporCorredor[j], ListadeVentasTotalesPorCorredor[j]);
+			printf("El corredor %d hizo %d ventas y vendio un total de = $%.2lf\n", j, CantidadVentasporCorredor[j], VentasTotalesPorCorredor[j]);
 			printf("Promedio vendido = $%.2lf\n", promedioVendidoporCorredor);	
 	}
 	
+	// k representa el numero de corredor
 	for(k=1;k<11;k++)
 	{
-		ListaPorcentualdeCorredores[k] = ListadeVentasTotalesPorCorredor[k] * 100 / ventaDeLaEmpresa;
-		printf("Porcentual de venta representado por el corredor %d = %.2lf%%\n", k, ListaPorcentualdeCorredores[k]);
+		PorcentualdeCorredores[k] = VentasTotalesPorCorredor[k] * 100 / ventaDeLaEmpresa;
+		printf("Porcentual de venta representado por el corredor %d = %.2lf%%\n", k, PorcentualdeCorredores[k]);
 	}
 	
+	// l representa el numero de corredor
 	for(l=1;l<11;l++)
 	{
-		comisionDelCorredor = calcularComisiondeCorredor(ListadeVentasTotalesPorCorredor, l);
+		comisionDelCorredor = calcularComisiondeCorredor(VentasTotalesPorCorredor, l);
 		printf("Comision a cobrar por el corredor %d = $%.2lf\n", l, comisionDelCorredor);
 	}
 	
-	calcularMejorCorredor(ListadeVentasTotalesPorCorredor);
-	
-	//printf("Promedio de ventas de la empresa = $%.2lf\n", (ventaDeLaEmpresa / 10));
+	calcularCorredorMasRentable(VentasTotalesPorCorredor);
 	
 	return 0;
 }
@@ -165,7 +167,7 @@ double sumarImporteDeVentas(struct Venta listaDeVentas[1024],int sizeLista)
 }
 
 // Esta función no devuelve ningún valor, se encarga de llenar una lista vacía con las ventas de un corredor determinado
-void listaDeVentasDeCorredor(struct Venta listaDeVentas[1024],int sizeLista,int Corredor,struct Venta listaOutput[1024], int CantidadVentasporCorredor[1024])
+void crearListaDeVentasDeCorredor(struct Venta listaDeVentas[1024],int sizeLista,int Corredor,struct Venta ventasPorCorredor[1024], int CantidadVentasporCorredor[1024])
 {
 	int i, flag;
 	int j = 0;
@@ -174,16 +176,16 @@ void listaDeVentasDeCorredor(struct Venta listaDeVentas[1024],int sizeLista,int 
 		flag = 0;
 		if(listaDeVentas[i].idCorredor == Corredor)
 		{
-			listaOutput[j] = listaDeVentas[i];
+			ventasPorCorredor[j] = listaDeVentas[i];
 			j++;
 			flag=1;
 		}
 		if(!flag)
 		{
-			listaOutput[i].idCorredor = 0;
-			listaOutput[i].idArticulo = 0;
-			listaOutput[i].cantidad = 0;
-			listaOutput[i].descuento = 0;
+			ventasPorCorredor[i].idCorredor = 0;
+			ventasPorCorredor[i].idArticulo = 0;
+			ventasPorCorredor[i].cantidad = 0;
+			ventasPorCorredor[i].descuento = 0;
 		}
 	}
 	CantidadVentasporCorredor[Corredor] = j;
@@ -196,18 +198,18 @@ double calcularComisiondeCorredor(double ventaTotaldelCorredor[1024], int idCorr
 	return comision;
 }
 
-double calcularMejorCorredor(double ListadeVentasTotalesPorCorredor[1024])
+double calcularCorredorMasRentable(double VentasTotalesPorCorredor[1024])
 {
-	int i, mejorCorredor;
+	int i, corredorMasRentable;
 	double ventaMayor;
 	ventaMayor = 0;
 	for(i=0;i<10;i++)
 	{
-		if(ventaMayor < ListadeVentasTotalesPorCorredor[i])
+		if(ventaMayor < VentasTotalesPorCorredor[i])
 		{
-			ventaMayor = ListadeVentasTotalesPorCorredor[i];
-			mejorCorredor = i;
+			ventaMayor = VentasTotalesPorCorredor[i];
+			corredorMasRentable = i;
 		}
 	}
-	return printf("El corredor %d es el que mas vendio\n", mejorCorredor);
+	return printf("El corredor %d es el que mas vendio\n", corredorMasRentable);
 }
