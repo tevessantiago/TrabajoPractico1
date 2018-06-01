@@ -87,7 +87,7 @@ double main()
 	for(corredor=1;j<11;j++)
 	{
 			ventasDeCorredor(listaDeVentas, tamañoDeListaDeVentas, j, listaDeVentasPorCorredor /* Variable Output */, CantidadVentasporCorredor);
-			listaDeValorDeVentasPorCorredor[corredor] = valorDeVentas(listaDeVentasPorCorredor, i);
+			listaDeValorDeVentasPorCorredor[corredor] = valorDeVentas(listaDeVentasPorCorredor, tamañoDeListaDeVentasPorCorredor);
 			ValorDeVentasDeLaEmpresa =  ventaDeLaEmpresa + ListadeVentasTotalesPorCorredor[j];
 			if(CantidadDeVentasporCorredor[j] != 0)
 			{
