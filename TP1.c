@@ -17,8 +17,6 @@ cada vez que realiza una venta sabe
 Calcular e imprimir
 a.	importe total vendido por cada corredor
 b.	porcentual que representa sobre la venta de la empresa
-	Tengo que calcular el importe total vendido (asumo que eso es la venta de la empresa) y despues calcular qué porcentaje pertenece a cada corredor (asumiendo que está implícito)
-	Se me ocurre hacer una suma de todos los importes vendidos por cada corredor para representar la venta de la empresa. Luego calcular el porcentual.
 c.	comisión a cobrar por cada corredor
 d.	cantidad de ventas realizadas por cada corredor
 e.	promedio del valor vendido por cada corredor
@@ -27,40 +25,44 @@ f.	nro de corredor que vendió más
 
 #include <stdio.h>
 
-struct Venta {
+struct Venta 
+{
 	int    idCorredor;
 	int    idArticulo;
 	double cantidad;
 	double descuento;
 };
 
-double comisionPorcentual123 = 5;
-double comisionPorcentual456 = 8;
-double comisionPorcentual789 = 10;
-double comisionPorcentual10  = 12;
 double CalcularVentaDeCorredor(int, int, double, double);
 double CalcularImporteDeVenta(struct Venta venta);
 double CalcularVenta(double, double, double);
-void listaDeVentasDeCorredor(struct Venta[1024],int,int,struct Venta[1024]);
+void listaDeVentasDeCorredor(struct Venta[1024],int,int,struct Venta[1024], int[1024]);
 double sumarImporteDeVentas(struct Venta[1024],int);
+double calcularComisiondeCorredor(double ventaTotaldelCorredor[1024], int idCorredor);
+double calcularMejorCorredor(double ListadeVentasTotalesPorCorredor[1024]);
+
 double main()
 {
-	int NumerodeCorredor, ArticuloVendido;
-	double CantidadArticulosVendidos, DescuentoAplicado, totalVendidoporCorredor;
+	int NumerodeCorredor, ArticuloVendido, i, j, k, l, m;
+	int CantidadVentasporCorredor[1024] = { 0 }; // ordenada del 1 al 10
+	double CantidadArticulosVendidos, DescuentoAplicado, ventaDeLaEmpresa, comisionDelCorredor, promedioVendidoporCorredor;
+	double ListadeVentasTotalesPorCorredor[1024], ListaPorcentualdeCorredores[1024]; // ordenados del 1 al 10
+	struct Venta listaDeVentas[1024];
 	struct Venta listaVaciaOutput[1024];
+
+	ventaDeLaEmpresa = 0;
+	promedioVendidoporCorredor = 0;
 	
 	FILE *archivoDeCorredores;
 	archivoDeCorredores = fopen("corredores.txt", "r");
 	if (!archivoDeCorredores) {
 		printf("Error reading corredores.txt file");
 		return -1;
-	}
+	}	
 	
-	struct Venta listaDeVentas[1024];
 	// Lee numero de corredor
 	fscanf(archivoDeCorredores, "%d",&NumerodeCorredor);
-	int i = 0;
-	int j = 0;
+
 	while(NumerodeCorredor != 0)
 	{
 		// Lee numero de articulo
@@ -82,27 +84,39 @@ double main()
 		fscanf(archivoDeCorredores, "%d",&NumerodeCorredor);
 	}
 	
-	/*listaDeVentasDeCorredor(listaDeVentas, i, 10, listaVaciaOutput);
-	totalVendidoporCorredor = sumarImporteDeVentas(listaVaciaOutput, i); 
-	printf("Total vendido por Corredor 10 = %.2lf",totalVendidoporCorredor);*/
-	
 	for(j=1;j<11;j++)
 	{
-			listaDeVentasDeCorredor(listaDeVentas, i, j, listaVaciaOutput);
-			totalVendidoporCorredor = sumarImporteDeVentas(listaVaciaOutput, i); 
-			printf("Total vendido por Corredor %d = %.2lf\n",j, totalVendidoporCorredor);
+			listaDeVentasDeCorredor(listaDeVentas, i, j, listaVaciaOutput, CantidadVentasporCorredor);
+			ListadeVentasTotalesPorCorredor[j] = sumarImporteDeVentas(listaVaciaOutput, i);
+			ventaDeLaEmpresa =  ventaDeLaEmpresa + ListadeVentasTotalesPorCorredor[j];
+			if(CantidadVentasporCorredor[j] != 0)
+			{
+				promedioVendidoporCorredor = (ListadeVentasTotalesPorCorredor[j] / (double)CantidadVentasporCorredor[j]);
+			}			
+			else
+			{
+				promedioVendidoporCorredor = 0;
+			}			
+			printf("El corredor %d hizo %d ventas y vendio un total de = $%.2lf\n", j, CantidadVentasporCorredor[j], ListadeVentasTotalesPorCorredor[j]);
+			printf("Promedio vendido = $%.2lf\n", promedioVendidoporCorredor);	
 	}
-
 	
-	//listaDeVentasDeCorredor(listaDeVentas, i, 3, listaVaciaOutput);
-	//printf("%.2lf",sumarImporteDeVentas(listaDeVentas,i));
-	//printf("%lf",CalcularImporteDeVenta(venta));
-	//printf("Total de venta = %.2lf\n",CalcularVentaDeCorredor(NumerodeCorredor, ArticuloVendido, CantidadArticulosVendidos, DescuentoAplicado));
-	/*
-	int lista[1024];
-	listaDeVentasDeCorredor(lista);
-	printf("%d",lista[4]);
-	*/
+	for(k=1;k<11;k++)
+	{
+		ListaPorcentualdeCorredores[k] = ListadeVentasTotalesPorCorredor[k] * 100 / ventaDeLaEmpresa;
+		printf("Porcentual de venta representado por el corredor %d = %.2lf%%\n", k, ListaPorcentualdeCorredores[k]);
+	}
+	
+	for(l=1;l<11;l++)
+	{
+		comisionDelCorredor = calcularComisiondeCorredor(ListadeVentasTotalesPorCorredor, l);
+		printf("Comision a cobrar por el corredor %d = $%.2lf\n", l, comisionDelCorredor);
+	}
+	
+	calcularMejorCorredor(ListadeVentasTotalesPorCorredor);
+	
+	//printf("Promedio de ventas de la empresa = $%.2lf\n", (ventaDeLaEmpresa / 10));
+	
 	return 0;
 }
 
@@ -118,7 +132,17 @@ double valorDeArticulo(int idArticulo){
 	return valorDeArticulo;
 }
 
-
+double comisionCorrespondiente(int idCorredor){
+	double comisionCorrespondiente;
+	switch(idCorredor)
+	{
+		case 1 ... 3: comisionCorrespondiente = 5; break;
+		case 4 ... 6: comisionCorrespondiente = 8; break;
+		case 7 ... 9: comisionCorrespondiente = 10; break;
+		case 10		: comisionCorrespondiente = 12; break;
+	}
+	return comisionCorrespondiente;
+}
 
 double CalcularImporteDeVenta(struct Venta venta)
 {
@@ -127,12 +151,6 @@ double CalcularImporteDeVenta(struct Venta venta)
 	double valorVentaDescontada = valorVenta * (1-(venta.descuento/100));
 	return valorVentaDescontada;
 }
-
-/*
-	Necesito una funcion que dada una lista de ventas devuelva la suma de los importes de las ventas
-	Input: struct venta listaDeVentas 
-	Output: double totalImportedeVentas
-		*/
 		
 double sumarImporteDeVentas(struct Venta listaDeVentas[1024],int sizeLista)
 {
@@ -146,35 +164,50 @@ double sumarImporteDeVentas(struct Venta listaDeVentas[1024],int sizeLista)
 	return sumaImporteDeVentas;
 }
 
-/*
-	Necesito una funcion que dada la lista de ventas devuelva una lista de venta mas chicas que contenga todas las ventas de un corredor especifico
-	Input: struct Venta listaDeVentas, int idCorredor
-	Output: struct Venta listaDeVentasPorCorredor*/
-
-void listaDeVentasDeCorredor(struct Venta listaDeVentas[1024],int sizeLista,int idCorredor,struct Venta listaOutput[1024])
+// Esta función no devuelve ningún valor, se encarga de llenar una lista vacía con las ventas de un corredor determinado
+void listaDeVentasDeCorredor(struct Venta listaDeVentas[1024],int sizeLista,int Corredor,struct Venta listaOutput[1024], int CantidadVentasporCorredor[1024])
 {
-	int i;
+	int i, flag;
 	int j = 0;
 	for(i= 0;i<sizeLista;i++)
 	{
-		if(listaDeVentas[i].idCorredor == idCorredor)
+		flag = 0;
+		if(listaDeVentas[i].idCorredor == Corredor)
 		{
 			listaOutput[j] = listaDeVentas[i];
 			j++;
+			flag=1;
+		}
+		if(!flag)
+		{
+			listaOutput[i].idCorredor = 0;
+			listaOutput[i].idArticulo = 0;
+			listaOutput[i].cantidad = 0;
+			listaOutput[i].descuento = 0;
 		}
 	}
+	CantidadVentasporCorredor[Corredor] = j;
 }
 
-/*double CalcularVentaDeCorredor(int Corredor, int Articulo, double Cantidad, double Descuento)
-{ 
-	
-	switch(Corredor)
+double calcularComisiondeCorredor(double ventaTotaldelCorredor[1024], int idCorredor)
+{
+	double comision = 0;
+	comision = ventaTotaldelCorredor[idCorredor] * (comisionCorrespondiente(idCorredor) / 100);
+	return comision;
+}
+
+double calcularMejorCorredor(double ListadeVentasTotalesPorCorredor[1024])
+{
+	int i, mejorCorredor;
+	double ventaMayor;
+	ventaMayor = 0;
+	for(i=0;i<10;i++)
 	{
-		case 1 ... 3: return CalcularVentaDeArticulos(Articulo, Cantidad, Descuento); break;
-		case 4 ... 6: return CalcularVentaDeArticulos(Articulo, Cantidad, Descuento); break;
-		case 7 ... 9: return CalcularVentaDeArticulos(Articulo, Cantidad, Descuento); break;
-		case 	  10: return CalcularVentaDeArticulos(Articulo, Cantidad, Descuento); break;	
-		
+		if(ventaMayor < ListadeVentasTotalesPorCorredor[i])
+		{
+			ventaMayor = ListadeVentasTotalesPorCorredor[i];
+			mejorCorredor = i;
+		}
 	}
-	
-}*/
+	return printf("El corredor %d es el que mas vendio\n", mejorCorredor);
+}
