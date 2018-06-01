@@ -103,7 +103,7 @@ double main()
 	
 	for(corredor=1;k<11;k++)
 	{
-		listaDePorcionesDeVentasPorCorredor[corredor] = ListadeVentasTotalesPorCorredor[k] * 100 / ventaDeLaEmpresa;
+		listaDePorcionesDeVentasPorCorredor[corredor] = ListadeVentasTotalesPorCorredor[k] / ventaDeLaEmpresa;
 		printf("Porcentual de venta representado por el corredor %d = %.2lf%%\n", k, ListaPorcentualdeCorredores[k]);
 	}
 	
