@@ -53,5 +53,5 @@ double main(){
 	printf("Monto total a cobrar a OS2 = $%.2lf",montoTotalOS2);
 	printf("Monto total a cobrar a OS3 = $%.2lf",montoTotalOS3);
 	printf("Monto total a cobrar a OS4 = $%.2lf",montoTotalOS4);
-	printf("Valor promedio total de las consultas realizadas",valorPromedioDeConsultas);
+	printf("Valor promedio total de las consultas realizadas = $%.2lf",valorPromedioDeConsultas);
 }
